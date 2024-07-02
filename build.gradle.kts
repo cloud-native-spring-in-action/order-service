@@ -19,10 +19,13 @@ repositories {
 	mavenCentral()
 }
 
+extra["springCloudVersion"] = "2023.0.2"
+
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.cloud:spring-cloud-stream-binder-rabbit")
 	runtimeOnly("org.postgresql:postgresql")
 	runtimeOnly("org.postgresql:r2dbc-postgresql")
     runtimeOnly("org.flywaydb:flyway-core")
@@ -37,7 +40,14 @@ dependencies {
 	testImplementation("org.testcontainers:postgresql")
 	testImplementation("org.testcontainers:r2dbc")
     testImplementation("com.squareup.okhttp3:mockwebserver")
+    testImplementation("org.springframework.cloud:spring-cloud-stream-test-binder")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+    }
 }
 
 tasks.withType<BootBuildImage> {
